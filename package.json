@@ -1,14 +1,19 @@
 {
+	"publisher": "kentatanaka",
   	"name": "screcommender",
 	"displayName": "SCRecommender",
-	"description": "卒業研究のために作成される、ショートカットレコメンダーである。",
+	"description": "ショートカットキーを提案します",
 	"version": "0.0.1",
-	"icon": "icon.png",
+	"icon": "images/icon.png",
+	"repository": {
+	    "type": "git",
+	    "url": "https://github.com/ritosu/screcommender.git"
+	},
 	"engines": {
 		"vscode": "^1.69.0"
 	},
 	"categories": [
-		"Other"
+		"Education"
 	],
 	"activationEvents": [
 		"*"
