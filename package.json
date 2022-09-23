@@ -3,7 +3,7 @@
 	"name": "screcommender",
 	"displayName": "SCRecommender",
 	"description": "ショートカットキーを提案します",
-	"version": "0.0.1",
+	"version": "0.0.3",
 	"icon": "images/icon.png",
 	"repository": {
 		"type": "git",
@@ -16,7 +16,7 @@
 		"Education"
 	],
 	"activationEvents": [
-		"*"
+		"onStartupFinished"
 	],
 	"main": "./out/extension.js",
 	"scripts": {

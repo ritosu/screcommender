@@ -51,7 +51,7 @@ export class LogMonitoring {
                             !preUsedKeybindingsSet.has(lineOfLog[lineOfLog.length-logIndexDiff]) &&
                             keybindingsMap.has(lineOfLog[lineOfLog.length-logIndexDiff]) &&
                             lineOfLog[lineOfLog.length-logIndexDiff] !== 'notification.clear') {
-                            vscode.window.showInformationMessage('「'+keybindingsMap.get(lineOfLog[lineOfLog.length-logIndexDiff])+'」　が代わりに使用できます');
+                            vscode.window.showInformationMessage('「'+keybindingsMap.get(lineOfLog[lineOfLog.length-logIndexDiff])+'」　を代わりに使用できます。');
                         }
                     }
                     preUsedKeybindingsSet = usedKeybindingsSet;
