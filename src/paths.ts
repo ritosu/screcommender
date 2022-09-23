@@ -18,8 +18,10 @@ export const logPath = (() => {
     switch(osType) {
         case 'Windows_NT':
             logpath += '/AppData/Roaming/Code/logs/';
+            break;
         case 'Darwin':
             logpath += '/Library/Application Support/Code/logs/';
+            break;
         default:
             '';
     }
@@ -27,13 +29,15 @@ export const logPath = (() => {
     const targetLogDir = logDirs[logDirs.length-1];
     const files = fs.readdirSync(logpath + targetLogDir + '/');
 
-    let maxRendererLogNum = 0;
+    let lastModifiedLogDate = new Date('1995-12-17T03:24:00');
     let targetFileIndex = 0;
     for(var i = files.length-1; i >= 0; --i) {
         if(files[i].indexOf('renderer') !== -1) {
             const rendererLogNum = Number(files[i].substring(8, files[i].length-4));
-            if(rendererLogNum> maxRendererLogNum) {
-                maxRendererLogNum = rendererLogNum;
+            const stat = fs.statSync(logpath+targetLogDir+'/'+files[i]);
+            console.log(files[i]+":"+stat.atime)
+            if(stat.atime > lastModifiedLogDate) {
+                lastModifiedLogDate = stat.atime;
                 targetFileIndex = i;
             }
         }
