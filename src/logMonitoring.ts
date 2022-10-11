@@ -1,6 +1,6 @@
 import * as chokidar from 'chokidar';
 import { logPath } from './paths';
-import { geteKeybindings } from './keybindings';
+import { getCommandTitles, geteKeybindings } from './keybindings';
 import * as fs from 'fs';
 import * as vscode from 'vscode';
 import * as os from 'os';
@@ -14,6 +14,7 @@ export class LogMonitoring {
     startMonitoring() {
         console.log("logPath:"+logPath);
         const keybindingsMap = geteKeybindings();
+        const commandTitleMap = getCommandTitles();
         const watcher = chokidar.watch(logPath, {
             ignored:/[\/\\]\./,
             persistent: true,
@@ -51,7 +52,11 @@ export class LogMonitoring {
                             !preUsedKeybindingsSet.has(lineOfLog[lineOfLog.length-logIndexDiff]) &&
                             keybindingsMap.has(lineOfLog[lineOfLog.length-logIndexDiff]) &&
                             lineOfLog[lineOfLog.length-logIndexDiff] !== 'notification.clear') {
-                            vscode.window.showInformationMessage('「'+keybindingsMap.get(lineOfLog[lineOfLog.length-logIndexDiff])+'」　を代わりに使用できます。');
+                                var title = '';
+                                if(commandTitleMap.has(lineOfLog[lineOfLog.length-logIndexDiff])) {
+                                    title = '「' + commandTitleMap.get(lineOfLog[lineOfLog.length-logIndexDiff]) + '」 の実行に';
+                                }
+                                vscode.window.showInformationMessage(title + ' 「'+keybindingsMap.get(lineOfLog[lineOfLog.length-logIndexDiff])+'」 を代わりに使用できます。');
                         }
                     }
                     preUsedKeybindingsSet = usedKeybindingsSet;

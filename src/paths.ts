@@ -68,3 +68,5 @@ export const keybindingsPath = (() => {
             return '';
     }
 })();
+
+export const commandTitlePath = './commandTitle.json';

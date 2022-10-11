@@ -1,4 +1,4 @@
-import { keybindingsPath, userKeybindingsPath } from "./paths";
+import { keybindingsPath, userKeybindingsPath, commandTitlePath } from "./paths";
 import * as fs from 'fs';
 
 export function geteKeybindings() : Map<string, string> {
@@ -21,4 +21,14 @@ export function geteKeybindings() : Map<string, string> {
     }
 
     return keybindingsMap;
+}
+
+export function getCommandTitles() : Map<string, string> {
+    const commandTitleMap = new Map<string, string>();
+    const commandTitlejsonData = require(commandTitlePath);
+    commandTitlejsonData.forEach(data => {
+        commandTitleMap.set(data.command, data.title);
+    });
+
+    return commandTitleMap;
 }
