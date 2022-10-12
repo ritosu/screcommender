@@ -61,12 +61,12 @@ export const userKeybindingsPath = (() => {
 export const keybindingsPath = (() => {
     switch (osType) {
         case 'Windows_NT':
-            return './defaultKeybindingsWin.json';
+            return '../data/defaultKeybindingsWin.json';
         case 'Darwin':
-            return './defaultKeybindingsMac.json';
+            return '../data/defaultKeybindingsMac.json';
         default:
             return '';
     }
 })();
 
-export const commandTitlePath = './commandTitle.json';
+export const commandTitlePath = '../data/commandTitle.json';
