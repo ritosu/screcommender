@@ -5,10 +5,23 @@ import * as fs from 'fs';
 import * as vscode from 'vscode';
 import * as os from 'os';
 
-export class LogMonitoring {
-    constructor() {
-        vscode.commands.executeCommand('workbench.action.setLogLevel');
+const myLogFileName = 'log_hkrecommender.txt';
 
+export class LogMonitoring {
+    static myLogDir: string;
+    static myLogFile: string;
+    constructor(context: vscode.ExtensionContext) {
+        vscode.commands.executeCommand('workbench.action.setLogLevel');
+        LogMonitoring.myLogDir = context.logUri.path.substring(1, context.logUri.path.lastIndexOf('/logs/')+6)+'hkrecommender';
+        LogMonitoring.myLogFile = LogMonitoring.myLogDir +'/'+ myLogFileName;
+        vscode.window.showInformationMessage(LogMonitoring.myLogFile);
+        if(!fs.existsSync(LogMonitoring.myLogDir)) {
+            fs.mkdirSync(LogMonitoring.myLogDir);
+        }
+        if(!fs.existsSync(LogMonitoring.myLogFile)) {
+            fs.writeFileSync(LogMonitoring.myLogFile, "", (err)=> {
+            })
+        }
     }
 
     startMonitoring() {
@@ -47,6 +60,8 @@ export class LogMonitoring {
                         console.log("LOG:"+i+" "+lineOfLog[lineOfLog.length-logIndexDiff])
                         if(lineOfLog[lineOfLog.length-2-logIndexDiff] === 'KeybindingService#dispatch') {
                             usedKeybindingsSet.add(lineOfLog[lineOfLog.length-logIndexDiff]);
+                            fs.appendFileSync(LogMonitoring.myLogFile, lineOfLog[lineOfLog.length-logIndexDiff]+' キー\n',(err) => {
+                            });
                         }
                         if(!usedKeybindingsSet.has(lineOfLog[lineOfLog.length-logIndexDiff]) &&
                             !preUsedKeybindingsSet.has(lineOfLog[lineOfLog.length-logIndexDiff]) &&
@@ -57,6 +72,8 @@ export class LogMonitoring {
                                     title = '「' + commandTitleMap.get(lineOfLog[lineOfLog.length-logIndexDiff]) + '」 の実行に';
                                 }
                                 vscode.window.showInformationMessage(title + ' 「'+keybindingsMap.get(lineOfLog[lineOfLog.length-logIndexDiff])+'」 を代わりに使用できます。');
+                                fs.appendFileSync(LogMonitoring.myLogFile, lineOfLog[lineOfLog.length-logIndexDiff]+'\n',(err) => {
+                                });
                         }
                     }
                     preUsedKeybindingsSet = usedKeybindingsSet;

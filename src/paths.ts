@@ -26,7 +26,8 @@ export const logPath = (() => {
             '';
     }
     const logDirs = fs.readdirSync(logpath);
-    const targetLogDir = logDirs[logDirs.length-1];
+    let targetLogDir = logDirs[logDirs.length-1];
+    if(logDirs[logDirs.length-1]==='hkrecommender') targetLogDir = logDirs[logDirs.length-2];
     const files = fs.readdirSync(logpath + targetLogDir + '/');
 
     let lastModifiedLogDate = new Date('1995-12-17T03:24:00');
