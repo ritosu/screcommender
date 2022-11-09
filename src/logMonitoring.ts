@@ -1,5 +1,5 @@
 import * as chokidar from 'chokidar';
-import { logPath } from './paths';
+import { makeLogPath } from './paths';
 import { getCommandTitles, geteKeybindings } from './keybindings';
 import * as fs from 'fs';
 import * as vscode from 'vscode';
@@ -10,11 +10,16 @@ const myLogFileName = 'log_hkrecommender.txt';
 export class LogMonitoring {
     static myLogDir: string;
     static myLogFile: string;
+    static isEnable: boolean;
+    static logPath: string;
     constructor(context: vscode.ExtensionContext) {
+        console.log('logUri'+context.logUri)
+        LogMonitoring.logPath = makeLogPath(context.logUri.path);
         vscode.commands.executeCommand('workbench.action.setLogLevel');
         LogMonitoring.myLogDir = context.logUri.path.substring(1, context.logUri.path.lastIndexOf('/logs/')+6)+'hkrecommender';
         LogMonitoring.myLogFile = LogMonitoring.myLogDir +'/'+ myLogFileName;
         vscode.window.showInformationMessage(LogMonitoring.myLogFile);
+        LogMonitoring.isEnable = false;
         if(!fs.existsSync(LogMonitoring.myLogDir)) {
             fs.mkdirSync(LogMonitoring.myLogDir);
         }
@@ -22,13 +27,27 @@ export class LogMonitoring {
             fs.writeFileSync(LogMonitoring.myLogFile, "", (err)=> {
             })
         }
+
+
+        const commandHandler = () => {
+            LogMonitoring.isEnable = false;
+            fs.appendFileSync(LogMonitoring.myLogFile, '機能オフ\n',(err) => {
+            });
+        };
+        const commandHandle = () => {
+            LogMonitoring.isEnable = true;
+            fs.appendFileSync(LogMonitoring.myLogFile, '機能オン\n',(err) => {
+            });
+        };
+        context.subscriptions.push(vscode.commands.registerCommand('screcommender.off', commandHandler));
+        context.subscriptions.push(vscode.commands.registerCommand('screcommender.on', commandHandle));
     }
 
     startMonitoring() {
-        console.log("logPath:"+logPath);
+        console.log("logPath:"+LogMonitoring.logPath);
         const keybindingsMap = geteKeybindings();
         const commandTitleMap = getCommandTitles();
-        const watcher = chokidar.watch(logPath, {
+        const watcher = chokidar.watch(LogMonitoring.logPath, {
             ignored:/[\/\\]\./,
             persistent: true,
             usePolling: true
@@ -58,9 +77,10 @@ export class LogMonitoring {
                     for(var i = 0; i < readLength; ++i) {
                         const lineOfLog = logArray[logArray.length-1+i-readLength].split(/\s/);
                         console.log("LOG:"+i+" "+lineOfLog[lineOfLog.length-logIndexDiff])
+
                         if(lineOfLog[lineOfLog.length-2-logIndexDiff] === 'KeybindingService#dispatch') {
                             usedKeybindingsSet.add(lineOfLog[lineOfLog.length-logIndexDiff]);
-                            fs.appendFileSync(LogMonitoring.myLogFile, lineOfLog[lineOfLog.length-logIndexDiff]+' キー\n',(err) => {
+                            if(lineOfLog[lineOfLog.length-logIndexDiff]!=='undefined')fs.appendFileSync(LogMonitoring.myLogFile, (new Date()).toISOString()+' '+lineOfLog[lineOfLog.length-logIndexDiff]+' キー\n',(err) => {
                             });
                         }
                         if(!usedKeybindingsSet.has(lineOfLog[lineOfLog.length-logIndexDiff]) &&
@@ -71,8 +91,8 @@ export class LogMonitoring {
                                 if(commandTitleMap.has(lineOfLog[lineOfLog.length-logIndexDiff])) {
                                     title = '「' + commandTitleMap.get(lineOfLog[lineOfLog.length-logIndexDiff]) + '」 の実行に';
                                 }
-                                vscode.window.showInformationMessage(title + ' 「'+keybindingsMap.get(lineOfLog[lineOfLog.length-logIndexDiff])+'」 を代わりに使用できます。');
-                                fs.appendFileSync(LogMonitoring.myLogFile, lineOfLog[lineOfLog.length-logIndexDiff]+'\n',(err) => {
+                                if(LogMonitoring.isEnable)vscode.window.showInformationMessage(title + ' 「'+keybindingsMap.get(lineOfLog[lineOfLog.length-logIndexDiff])+'」 を代わりに使用できます。');
+                                fs.appendFileSync(LogMonitoring.myLogFile, (new Date()).toISOString()+' '+lineOfLog[lineOfLog.length-logIndexDiff]+'\n',(err) => {
                                 });
                         }
                     }

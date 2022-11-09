@@ -18,6 +18,18 @@
 	"activationEvents": [
 		"onStartupFinished"
 	],
+	"contributes": {
+		"commands": [
+			{
+				"command": "screcommender.on", 
+				"title": "提案をオンにする"
+			},
+			{
+				"command": "screcommender.off",
+				"title": "提案をオフにする"
+			}
+		]
+	},
 	"main": "./out/extension.js",
 	"scripts": {
 		"vscode:prepublish": "npm run compile",

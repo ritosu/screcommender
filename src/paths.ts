@@ -1,5 +1,6 @@
 import * as fs from 'fs';
 import * as os from 'os';
+import * as vscode from 'vscode';
 
 const osType = (() => {
     const ostype = os.type();
@@ -13,7 +14,7 @@ const osType = (() => {
     }
 })();
 
-export const logPath = (() => {
+export function makeLogPath(logUri: string) {
     let logpath = os.homedir();
     switch(osType) {
         case 'Windows_NT':
@@ -28,6 +29,7 @@ export const logPath = (() => {
     const logDirs = fs.readdirSync(logpath);
     let targetLogDir = logDirs[logDirs.length-1];
     if(logDirs[logDirs.length-1]==='hkrecommender') targetLogDir = logDirs[logDirs.length-2];
+    if(osType === 'Windows_NT') targetLogDir += logUri.substring(logUri.indexOf('/window'), logUri.indexOf('/exthost'));
     const files = fs.readdirSync(logpath + targetLogDir + '/');
 
     let lastModifiedLogDate = new Date('1995-12-17T03:24:00');
@@ -43,9 +45,10 @@ export const logPath = (() => {
             }
         }
     }
+    
     logpath += targetLogDir + '/' + files[targetFileIndex];
     return logpath;
-})();
+};
 
 export const userKeybindingsPath = (() => {
     let userLogPath = os.homedir();
