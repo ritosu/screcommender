@@ -29,7 +29,7 @@ export function makeLogPath(logUri: string) {
     const logDirs = fs.readdirSync(logpath);
     let targetLogDir = logDirs[logDirs.length-1];
     if(logDirs[logDirs.length-1]==='hkrecommender') targetLogDir = logDirs[logDirs.length-2];
-    if(osType === 'Windows_NT') targetLogDir += logUri.substring(logUri.indexOf('/window'), logUri.indexOf('/exthost'));
+    targetLogDir += logUri.substring(logUri.indexOf('/window'), logUri.indexOf('/exthost'));
     const files = fs.readdirSync(logpath + targetLogDir + '/');
 
     let lastModifiedLogDate = new Date('1995-12-17T03:24:00');

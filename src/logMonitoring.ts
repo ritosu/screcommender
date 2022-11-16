@@ -36,7 +36,7 @@ export class LogMonitoring {
         };
         const commandHandle = () => {
             LogMonitoring.isEnable = true;
-            fs.appendFileSync(LogMonitoring.myLogFile, '機能オン\n',(err) => {
+            fs.appendFileSync(LogMonitoring.myLogFile, (new Date().toLocaleString({ timeZone: 'Asia/Tokyo' })) + ' 機能オン\n',(err) => {
             });
         };
         context.subscriptions.push(vscode.commands.registerCommand('screcommender.off', commandHandler));
@@ -80,7 +80,7 @@ export class LogMonitoring {
 
                         if(lineOfLog[lineOfLog.length-2-logIndexDiff] === 'KeybindingService#dispatch') {
                             usedKeybindingsSet.add(lineOfLog[lineOfLog.length-logIndexDiff]);
-                            if(lineOfLog[lineOfLog.length-logIndexDiff]!=='undefined')fs.appendFileSync(LogMonitoring.myLogFile, (new Date()).toISOString()+' '+lineOfLog[lineOfLog.length-logIndexDiff]+' キー\n',(err) => {
+                            if(lineOfLog[lineOfLog.length-logIndexDiff]!=='undefined')fs.appendFileSync(LogMonitoring.myLogFile, (new Date().toLocaleString({ timeZone: 'Asia/Tokyo' }))+' '+lineOfLog[lineOfLog.length-logIndexDiff]+' キー\n',(err) => {
                             });
                         }
                         if(!usedKeybindingsSet.has(lineOfLog[lineOfLog.length-logIndexDiff]) &&
@@ -92,7 +92,7 @@ export class LogMonitoring {
                                     title = '「' + commandTitleMap.get(lineOfLog[lineOfLog.length-logIndexDiff]) + '」 の実行に';
                                 }
                                 if(LogMonitoring.isEnable)vscode.window.showInformationMessage(title + ' 「'+keybindingsMap.get(lineOfLog[lineOfLog.length-logIndexDiff])+'」 を代わりに使用できます。');
-                                fs.appendFileSync(LogMonitoring.myLogFile, (new Date()).toISOString()+' '+lineOfLog[lineOfLog.length-logIndexDiff]+'\n',(err) => {
+                                fs.appendFileSync(LogMonitoring.myLogFile, (new Date().toLocaleString({ timeZone: 'Asia/Tokyo' }))+' '+lineOfLog[lineOfLog.length-logIndexDiff]+'\n',(err) => {
                                 });
                         }
                     }
