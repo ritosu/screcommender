@@ -24,20 +24,17 @@ export class LogMonitoring {
             fs.mkdirSync(LogMonitoring.myLogDir);
         }
         if(!fs.existsSync(LogMonitoring.myLogFile)) {
-            fs.writeFileSync(LogMonitoring.myLogFile, "", (err)=> {
-            })
+            fs.writeFileSync(LogMonitoring.myLogFile, "",)
         }
 
 
         const commandHandler = () => {
             LogMonitoring.isEnable = false;
-            fs.appendFileSync(LogMonitoring.myLogFile, '機能オフ\n',(err) => {
-            });
+            fs.appendFileSync(LogMonitoring.myLogFile, '機能オフ\n');
         };
         const commandHandle = () => {
             LogMonitoring.isEnable = true;
-            fs.appendFileSync(LogMonitoring.myLogFile, (new Date().toLocaleString({ timeZone: 'Asia/Tokyo' })) + ' 機能オン\n',(err) => {
-            });
+            fs.appendFileSync(LogMonitoring.myLogFile, (new Date(Date.now() + ((new Date().getTimezoneOffset() + (9 * 60)) * 60 * 1000)))+ ' 機能オン\n');
         };
         context.subscriptions.push(vscode.commands.registerCommand('screcommender.off', commandHandler));
         context.subscriptions.push(vscode.commands.registerCommand('screcommender.on', commandHandle));
@@ -80,8 +77,7 @@ export class LogMonitoring {
 
                         if(lineOfLog[lineOfLog.length-2-logIndexDiff] === 'KeybindingService#dispatch') {
                             usedKeybindingsSet.add(lineOfLog[lineOfLog.length-logIndexDiff]);
-                            if(lineOfLog[lineOfLog.length-logIndexDiff]!=='undefined')fs.appendFileSync(LogMonitoring.myLogFile, (new Date().toLocaleString({ timeZone: 'Asia/Tokyo' }))+' '+lineOfLog[lineOfLog.length-logIndexDiff]+' キー\n',(err) => {
-                            });
+                            if(lineOfLog[lineOfLog.length-logIndexDiff]!=='undefined')fs.appendFileSync(LogMonitoring.myLogFile, (new Date(Date.now() + ((new Date().getTimezoneOffset() + (9 * 60)) * 60 * 1000)))+' '+lineOfLog[lineOfLog.length-logIndexDiff]+' キー\n');
                         }
                         if(!usedKeybindingsSet.has(lineOfLog[lineOfLog.length-logIndexDiff]) &&
                             !preUsedKeybindingsSet.has(lineOfLog[lineOfLog.length-logIndexDiff]) &&
@@ -92,8 +88,7 @@ export class LogMonitoring {
                                     title = '「' + commandTitleMap.get(lineOfLog[lineOfLog.length-logIndexDiff]) + '」 の実行に';
                                 }
                                 if(LogMonitoring.isEnable)vscode.window.showInformationMessage(title + ' 「'+keybindingsMap.get(lineOfLog[lineOfLog.length-logIndexDiff])+'」 を代わりに使用できます。');
-                                fs.appendFileSync(LogMonitoring.myLogFile, (new Date().toLocaleString({ timeZone: 'Asia/Tokyo' }))+' '+lineOfLog[lineOfLog.length-logIndexDiff]+'\n',(err) => {
-                                });
+                                fs.appendFileSync(LogMonitoring.myLogFile, (new Date(Date.now() + ((new Date().getTimezoneOffset() + (9 * 60)) * 60 * 1000)))+' '+lineOfLog[lineOfLog.length-logIndexDiff]+'\n');
                         }
                     }
                     preUsedKeybindingsSet = usedKeybindingsSet;
