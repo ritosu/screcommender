@@ -26,7 +26,7 @@ export class LogMonitoring {
         if(!fs.existsSync(LogMonitoring.myLogFile)) {
             fs.writeFileSync(LogMonitoring.myLogFile, "",)
         }
-
+        fs.appendFileSync(LogMonitoring.myLogFile, (new Date(Date.now() + ((new Date().getTimezoneOffset() + (9 * 60)) * 60 * 1000)))+ ' 新ウィンドウ' +'\n');
 
         const commandHandler = () => {
             LogMonitoring.isEnable = false;
@@ -85,9 +85,9 @@ export class LogMonitoring {
                             lineOfLog[lineOfLog.length-logIndexDiff] !== 'notification.clear') {
                                 var title = '';
                                 if(commandTitleMap.has(lineOfLog[lineOfLog.length-logIndexDiff])) {
-                                    title = '「' + commandTitleMap.get(lineOfLog[lineOfLog.length-logIndexDiff]) + '」 の実行に';
+                                    title = commandTitleMap.get(lineOfLog[lineOfLog.length-logIndexDiff]) + ' は ';
                                 }
-                                if(LogMonitoring.isEnable)vscode.window.showInformationMessage(title + ' 「'+keybindingsMap.get(lineOfLog[lineOfLog.length-logIndexDiff])+'」 を代わりに使用できます。');
+                                if(LogMonitoring.isEnable)vscode.window.showInformationMessage(title + ' 「'+keybindingsMap.get(lineOfLog[lineOfLog.length-logIndexDiff])+'」 で実行可能です');
                                 fs.appendFileSync(LogMonitoring.myLogFile, (new Date(Date.now() + ((new Date().getTimezoneOffset() + (9 * 60)) * 60 * 1000)))+' '+lineOfLog[lineOfLog.length-logIndexDiff]+'\n');
                         }
                     }
