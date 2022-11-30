@@ -36,8 +36,8 @@ export class LogMonitoring {
             LogMonitoring.isEnable = true;
             fs.appendFileSync(LogMonitoring.myLogFile, (new Date(Date.now() + ((new Date().getTimezoneOffset() + (9 * 60)) * 60 * 1000)))+ ' 機能オン\n');
         };
-        context.subscriptions.push(vscode.commands.registerCommand('screcommender.off', commandHandler));
-        context.subscriptions.push(vscode.commands.registerCommand('screcommender.on', commandHandle));
+        context.subscriptions.push(vscode.commands.registerCommand('scr.off', commandHandler));
+        context.subscriptions.push(vscode.commands.registerCommand('scr.on', commandHandle));
     }
 
     startMonitoring() {
