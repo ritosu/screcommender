@@ -92,7 +92,7 @@ export class LogMonitoring {
                                     vscode.window.showInformationMessage(title + ' 「'+keybindingsMap.get(lineOfLog[lineOfLog.length-logIndexDiff])+'」 で実行可能です');
                                     message = 'メッセージ'
                                 }
-                                fs.appendFileSync(LogMonitoring.myLogFile, (new Date(Date.now() + ((new Date().getTimezoneOffset() + (9 * 60)) * 60 * 1000)))+' '+lineOfLog[lineOfLog.length-logIndexDiff]+message+'\n');
+                                fs.appendFileSync(LogMonitoring.myLogFile, (new Date(Date.now() + ((new Date().getTimezoneOffset() + (9 * 60)) * 60 * 1000)))+' '+lineOfLog[lineOfLog.length-logIndexDiff]+' '+message+'\n');
                         }
                     }
                     preUsedKeybindingsSet = usedKeybindingsSet;
