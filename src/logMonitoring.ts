@@ -87,8 +87,12 @@ export class LogMonitoring {
                                 if(commandTitleMap.has(lineOfLog[lineOfLog.length-logIndexDiff])) {
                                     title = '「' + commandTitleMap.get(lineOfLog[lineOfLog.length-logIndexDiff]) + '」 の実行に';
                                 }
-                                if(LogMonitoring.isEnable)vscode.window.showInformationMessage(title + ' 「'+keybindingsMap.get(lineOfLog[lineOfLog.length-logIndexDiff])+'」 を代わりに使用できます。');
-                                fs.appendFileSync(LogMonitoring.myLogFile, (new Date(Date.now() + ((new Date().getTimezoneOffset() + (9 * 60)) * 60 * 1000)))+' '+lineOfLog[lineOfLog.length-logIndexDiff]+'\n');
+                                let message = ''
+                                if(LogMonitoring.isEnable){
+                                    vscode.window.showInformationMessage(title + ' 「'+keybindingsMap.get(lineOfLog[lineOfLog.length-logIndexDiff])+'」 を代わりに使用できます。');
+                                    message = 'メッセージ'
+                                }
+                                fs.appendFileSync(LogMonitoring.myLogFile, (new Date(Date.now() + ((new Date().getTimezoneOffset() + (9 * 60)) * 60 * 1000)))+' '+lineOfLog[lineOfLog.length-logIndexDiff]+message+'\n');
                         }
                     }
                     preUsedKeybindingsSet = usedKeybindingsSet;
