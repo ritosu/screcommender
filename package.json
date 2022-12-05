@@ -3,7 +3,7 @@
 	"name": "screcommender",
 	"displayName": "SCRecommender",
 	"description": "ショートカットキーを提案します",
-	"version": "0.0.5",
+	"version": "0.0.8",
 	"icon": "images/icon.png",
 	"repository": {
 		"type": "git",
@@ -21,11 +21,11 @@
 	"contributes": {
 		"commands": [
 			{
-				"command": "screcommender.on", 
+				"command": "scr.on", 
 				"title": "提案をオンにする"
 			},
 			{
-				"command": "screcommender.off",
+				"command": "scr.off",
 				"title": "提案をオフにする"
 			}
 		]
